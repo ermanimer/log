@@ -9,7 +9,13 @@ go get -u github.com/ermanimer/logger
 ```
 
 # Features
-...
+**log** is a simple logging package for Go. 
+
+- You can set time format and prefixes. 
+- You can set logging level to filter out log messages. 
+- You can set a hook function to be called after each log.
+
+**log** isn't the fastest logging solution for Go, but **log** is efficient while being custimizable. Please see benchmark test results.
 
 # Usage
 ...
