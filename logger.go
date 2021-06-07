@@ -24,11 +24,11 @@ const (
 
 // logging levels
 const (
-	debugLevel = iota
-	infoLevel
-	warningLevel
-	errorLevel
-	fatalLevel
+	DebugLevel = iota
+	InfoLevel
+	WarningLevel
+	ErrorLevel
+	FatalLevel
 )
 
 // logger represents logger
@@ -52,7 +52,7 @@ func NewLogger(output io.Writer) *logger {
 	l := &logger{
 		mutex:         &sync.Mutex{},
 		output:        output,
-		loggingLevel:  debugLevel,
+		loggingLevel:  DebugLevel,
 		timeFormat:    timeFormat,
 		debugPrefix:   debugPrefix,
 		infoPrefix:    infoPrefix,
@@ -142,7 +142,7 @@ func (l *logger) SetHookFunction(hookFunction func(prefix, message string)) {
 
 // Debug logs a message with debug prefix
 func (l *logger) Debug(values ...interface{}) {
-	if l.loggingLevel > debugLevel {
+	if l.loggingLevel > DebugLevel {
 		return
 	}
 	l.log(l.debugPrefix, fmt.Sprint(values...))
@@ -150,7 +150,7 @@ func (l *logger) Debug(values ...interface{}) {
 
 // Debugf logs a formatted message with debug prefix
 func (l *logger) Debugf(format string, values ...interface{}) {
-	if l.loggingLevel > debugLevel {
+	if l.loggingLevel > DebugLevel {
 		return
 	}
 	l.log(l.debugPrefix, fmt.Sprintf(format, values...))
@@ -158,7 +158,7 @@ func (l *logger) Debugf(format string, values ...interface{}) {
 
 // Info logs a message with info prefix
 func (l *logger) Info(values ...interface{}) {
-	if l.loggingLevel > infoLevel {
+	if l.loggingLevel > InfoLevel {
 		return
 	}
 	l.log(l.infoPrefix, fmt.Sprint(values...))
@@ -166,7 +166,7 @@ func (l *logger) Info(values ...interface{}) {
 
 // Infof logs a formatted message with info prefix
 func (l *logger) Infof(format string, values ...interface{}) {
-	if l.loggingLevel > infoLevel {
+	if l.loggingLevel > InfoLevel {
 		return
 	}
 	l.log(l.infoPrefix, fmt.Sprintf(format, values...))
@@ -174,7 +174,7 @@ func (l *logger) Infof(format string, values ...interface{}) {
 
 // Warning logs a message with warning prefix
 func (l *logger) Warning(values ...interface{}) {
-	if l.loggingLevel > warningLevel {
+	if l.loggingLevel > WarningLevel {
 		return
 	}
 	l.log(l.warningPrefix, fmt.Sprint(values...))
@@ -182,7 +182,7 @@ func (l *logger) Warning(values ...interface{}) {
 
 // Warningf logs a formatted message with warning prefix
 func (l *logger) Warningf(format string, values ...interface{}) {
-	if l.loggingLevel > warningLevel {
+	if l.loggingLevel > WarningLevel {
 		return
 	}
 	l.log(l.warningPrefix, fmt.Sprintf(format, values...))
@@ -190,7 +190,7 @@ func (l *logger) Warningf(format string, values ...interface{}) {
 
 // Error logs a message with error prefix
 func (l *logger) Error(values ...interface{}) {
-	if l.loggingLevel > errorLevel {
+	if l.loggingLevel > ErrorLevel {
 		return
 	}
 	l.log(l.errorPrefix, fmt.Sprint(values...))
@@ -198,7 +198,7 @@ func (l *logger) Error(values ...interface{}) {
 
 // Errorf logs a formatted message with error prefix
 func (l *logger) Errorf(format string, values ...interface{}) {
-	if l.loggingLevel > errorLevel {
+	if l.loggingLevel > ErrorLevel {
 		return
 	}
 	l.log(l.errorPrefix, fmt.Sprintf(format, values...))
@@ -206,7 +206,7 @@ func (l *logger) Errorf(format string, values ...interface{}) {
 
 // Fatal logs a message with fatal prefix and calls os.Exit(1)
 func (l *logger) Fatal(values ...interface{}) {
-	if l.loggingLevel > fatalLevel {
+	if l.loggingLevel > FatalLevel {
 		return
 	}
 	l.log(l.fatalPrefix, fmt.Sprint(values...))
@@ -215,7 +215,7 @@ func (l *logger) Fatal(values ...interface{}) {
 
 // Fatalf logs a formatted message with fatal prefix and calls os.Exit(1)
 func (l *logger) Fatalf(format string, values ...interface{}) {
-	if l.loggingLevel > fatalLevel {
+	if l.loggingLevel > FatalLevel {
 		return
 	}
 	l.log(l.fatalPrefix, fmt.Sprintf(format, values...))
