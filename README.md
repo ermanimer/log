@@ -1,5 +1,5 @@
 # log
-Simple, customizable, leveled, zero allocation logging in Go
+Simple, customizable, leveled and efficient logging in Go
 
 [![Go](https://github.com/ermanimer/log/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/ermanimer/log/actions/workflows/go.yml) [![Go Report Card](https://goreportcard.com/badge/github.com/ermanimer/log)](https://goreportcard.com/report/github.com/ermanimer/log)
 
@@ -15,7 +15,7 @@ go get -u github.com/ermanimer/logger
 - You can set logging level to filter out log messages. 
 - You can set a hook function to be called after each log.
 
-**log** isn't the fastest logging solution for Go, but **log** is efficient while being custimizable. Please see benchmark test results.
+**log** isn't the fastest logging solution, but **log** is still efficient while being custimizable. Please see benchmark test results.
 
 # Usage
 **Simplest Usage:**
