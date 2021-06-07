@@ -47,7 +47,7 @@ type logger struct {
 	hookFunction  func(prefix, message string)
 }
 
-// New logger creates and returns a new logger instance with given output and default parameters
+// NewLogger creates and returns a new logger instance with given output and default parameters
 func NewLogger(output io.Writer) *logger {
 	l := &logger{
 		mutex:         &sync.Mutex{},
