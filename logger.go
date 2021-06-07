@@ -223,7 +223,7 @@ func (l *logger) Fatalf(format string, values ...interface{}) {
 }
 
 func (l *logger) log(prefix, message string) {
-	// syncronization
+	// synchronization
 	l.mutex.Lock()
 	defer l.mutex.Unlock()
 
