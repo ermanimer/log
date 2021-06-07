@@ -18,7 +18,33 @@ go get -u github.com/ermanimer/logger
 **log** isn't the fastest logging solution for Go, but **log** is efficient while being custimizable. Please see benchmark test results.
 
 # Usage
-...
+**Simplest Usage:**
+```go
+package main
+
+import (
+	"os"
+
+	"github.com/ermanimer/log"
+)
+
+func main() {
+	// create a new logger instance with output and default parameters
+	l := log.NewLogger(os.Stdout)
+
+	// log a message
+	l.Debug("this is a debug message")
+
+	// log a formatted message
+	l.Debugf("this is a %s debug message", "formatted")
+}
+```
+
+**Output:**
+```bash
+2021-06-07T16:46:26+03:00 debug this is a debug message
+2021-06-07T16:46:26+03:00 debug this is a formatted debug message
+```
 
 # Logging Levels
  - Debug
