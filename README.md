@@ -15,7 +15,7 @@ go get -u github.com/ermanimer/logger
 - You can set logging level to filter out log messages. 
 - You can set a hook function to be called after each log.
 
-**log** isn't the fastest logging solution, but **log** is efficient while being custimizable. Please see [benchmark tests](https://github.com/ermanimer/log#benchmark-tests).
+**log** isn't the fastest logging solution, but **log** is efficient while being customizable. Please see [benchmark tests](https://github.com/ermanimer/log#benchmark-tests).
 
 # Usage
 ```go
