@@ -15,10 +15,9 @@ go get -u github.com/ermanimer/logger
 - You can set logging level to filter out log messages. 
 - You can set a hook function to be called after each log.
 
-**log** isn't the fastest logging solution, but **log** is still efficient while being custimizable. Please see benchmark test results.
+**log** isn't the fastest logging solution, but **log** is efficient while being custimizable. Please see [benchmark tests](https://github.com/ermanimer/log#benchmark-tests).
 
 # Usage
-**Simplest Usage:**
 ```go
 package main
 
@@ -53,7 +52,7 @@ func main() {
  - Error
  - Fatal
 
-# Default Parameters
+# Default Parameters:
 | Parameter | Value |
 |:----------|:-----:|
 | Time Format | RFC3339 |
@@ -84,7 +83,7 @@ l.SetDebugPrefix("FAT")
 l.SetLoggingLevel(InfoLevel)
 ```
 
-# Set Hook Function
+# Set Hook Function:
 ```go
 l.SetHookFunction(func(prefix, message string) {
   //filter messages with prefix and capture for Sentry.io
@@ -93,7 +92,7 @@ l.SetHookFunction(func(prefix, message string) {
 ```
 
 # Benchmark Tests
-**Test Code:**
+**Test Codes:**
 ```go
 func BenchmarkDebug(b *testing.B) {
 	// create logger
