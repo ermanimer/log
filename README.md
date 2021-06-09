@@ -72,10 +72,10 @@ l.SetTimeFormat(time.RFC3339Nano)
 # Set Prefixes
 ```go
 l.SetDebugPrefix("DEB")
-l.SetDebugPrefix("INF")
-l.SetDebugPrefix("WAR")
-l.SetDebugPrefix("ERR")
-l.SetDebugPrefix("FAT")
+l.SetInfoPrefix("INF")
+l.SetWarningPrefix("WAR")
+l.SetErrorPrefix("ERR")
+l.SetFatalPrefix("FAT")
 ```
 
 # Set Logging Level
