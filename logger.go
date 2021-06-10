@@ -80,7 +80,7 @@ func (l *logger) TimeFormat() string {
 	return l.timeFormat
 }
 
-// SetTimeFormat sets time format of loggger
+// SetTimeFormat sets time format of logger
 func (l *logger) SetTimeFormat(timeFormat string) {
 	l.timeFormat = timeFormat
 }
@@ -244,8 +244,8 @@ func (l *logger) log(prefix, message string) {
 	// append new line character
 	l.buffer = append(l.buffer, "\n"...)
 
-	// write buffer to output
-	l.output.Write(l.buffer)
+	// write buffer to output, ignore error
+	_, _ = l.output.Write(l.buffer)
 
 	// call hook function
 	l.hookFunction(prefix, message)
