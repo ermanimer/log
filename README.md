@@ -5,7 +5,7 @@ Simple, customizable, leveled and efficient logging in Go
 
 # Installation
 ```bash
-go get -u github.com/ermanimer/logger
+go get -u github.com/ermanimer/log
 ```
 
 # Features
