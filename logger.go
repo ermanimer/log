@@ -17,11 +17,6 @@ const (
 	fatalPrefix   = "fatal"
 )
 
-// default time format
-const (
-	timeFormat = time.RFC3339
-)
-
 // logging levels
 const (
 	DebugLevel = iota
@@ -33,110 +28,117 @@ const (
 
 // Logger represents logger
 type Logger struct {
-	mutex         *sync.Mutex
-	output        io.Writer
-	buffer        []byte
-	loggingLevel  int
-	timeFormat    string
-	debugPrefix   string
-	infoPrefix    string
-	warningPrefix string
-	errorPrefix   string
-	fatalPrefix   string
-	exitFunction  func()
-	hookFunction  func(prefix, message string)
+	mutex               *sync.Mutex
+	output              io.Writer
+	internalErrorOutput io.Writer
+	buffer              []byte
+	loggingLevel        int
+	timeFormat          string
+	debugPrefix         string
+	infoPrefix          string
+	warningPrefix       string
+	errorPrefix         string
+	fatalPrefix         string
+	exitFunction        func()
+	hookFunction        func(prefix, message string)
 }
 
 // NewLogger creates and returns a new logger instance with given output and default parameters
-func NewLogger(output io.Writer) *Logger {
+func NewLogger() *Logger {
 	l := &Logger{
-		mutex:         &sync.Mutex{},
-		output:        output,
-		loggingLevel:  DebugLevel,
-		timeFormat:    timeFormat,
-		debugPrefix:   debugPrefix,
-		infoPrefix:    infoPrefix,
-		warningPrefix: warningPrefix,
-		errorPrefix:   errorPrefix,
-		fatalPrefix:   fatalPrefix,
-		exitFunction:  func() { os.Exit(1) },
-		hookFunction:  func(prefix, message string) {},
+		mutex:               &sync.Mutex{},
+		output:              os.Stdout,
+		internalErrorOutput: os.Stderr,
+		loggingLevel:        DebugLevel,
+		timeFormat:          time.RFC3339,
+		debugPrefix:         debugPrefix,
+		infoPrefix:          infoPrefix,
+		warningPrefix:       warningPrefix,
+		errorPrefix:         errorPrefix,
+		fatalPrefix:         fatalPrefix,
+		exitFunction:        func() { os.Exit(1) },
+		hookFunction:        func(prefix, message string) {},
 	}
 	return l
 }
 
-// LoggingLevel returns logging level of logger
-func (l *Logger) LoggingLevel() int {
-	return l.loggingLevel
+// SetOutput sets output of logger
+func (l *Logger) SetOutput(output io.Writer) {
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
+
+	l.output = output
+}
+
+// SetInternalErrorOutput sets internal error output of logger
+func (l *Logger) SetInternalErrorOutput(internalErrorOutput io.Writer) {
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
+
+	l.internalErrorOutput = internalErrorOutput
 }
 
 // SetLoggingLevel sets logging level of logger
 func (l *Logger) SetLoggingLevel(loggingLevel int) {
-	l.loggingLevel = loggingLevel
-}
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
 
-// TimeFormat returns time format of logger
-func (l *Logger) TimeFormat() string {
-	return l.timeFormat
+	l.loggingLevel = loggingLevel
 }
 
 // SetTimeFormat sets time format of logger
 func (l *Logger) SetTimeFormat(timeFormat string) {
-	l.timeFormat = timeFormat
-}
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
 
-// DebugPrefix returns debug prefix of logger
-func (l *Logger) DebugPrefix() string {
-	return l.debugPrefix
+	l.timeFormat = timeFormat
 }
 
 // SetDebugPrefix sets debug prefix of logger
 func (l *Logger) SetDebugPrefix(debugPrefix string) {
-	l.debugPrefix = debugPrefix
-}
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
 
-// InfoPrefix returns info prefix of logger
-func (l *Logger) InfoPrefix() string {
-	return l.infoPrefix
+	l.debugPrefix = debugPrefix
 }
 
 // SetInfoPrefix sets info prefix of logger
 func (l *Logger) SetInfoPrefix(infoPrefix string) {
-	l.infoPrefix = infoPrefix
-}
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
 
-// WarningPrefix returns warning prefix of logger
-func (l *Logger) WarningPrefix() string {
-	return l.warningPrefix
+	l.infoPrefix = infoPrefix
 }
 
 // SetWarningPrefix sets warning prefix of logger
 func (l *Logger) SetWarningPrefix(warningPrefix string) {
-	l.warningPrefix = warningPrefix
-}
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
 
-// ErrorPrefix returns error prefix of logger
-func (l *Logger) ErrorPrefix() string {
-	return l.errorPrefix
+	l.warningPrefix = warningPrefix
 }
 
 // SetErrorPrefix sets error prefix of logger
 func (l *Logger) SetErrorPrefix(errorPrefix string) {
-	l.errorPrefix = errorPrefix
-}
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
 
-// FatalPrefix returns fatal prefix of logger
-func (l *Logger) FatalPrefix() string {
-	return l.fatalPrefix
+	l.errorPrefix = errorPrefix
 }
 
 // SetFatalPrefix sets fatal prefix of logger
 func (l *Logger) SetFatalPrefix(fatalPrefix string) {
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
+
 	l.fatalPrefix = fatalPrefix
 }
 
 // SetHookFunction sets hook function
 func (l *Logger) SetHookFunction(hookFunction func(prefix, message string)) {
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
+
 	l.hookFunction = hookFunction
 }
 
@@ -145,6 +147,7 @@ func (l *Logger) Debug(values ...interface{}) {
 	if l.loggingLevel > DebugLevel {
 		return
 	}
+
 	l.log(l.debugPrefix, fmt.Sprint(values...))
 }
 
@@ -153,6 +156,7 @@ func (l *Logger) Debugf(format string, values ...interface{}) {
 	if l.loggingLevel > DebugLevel {
 		return
 	}
+
 	l.log(l.debugPrefix, fmt.Sprintf(format, values...))
 }
 
@@ -169,6 +173,7 @@ func (l *Logger) Infof(format string, values ...interface{}) {
 	if l.loggingLevel > InfoLevel {
 		return
 	}
+
 	l.log(l.infoPrefix, fmt.Sprintf(format, values...))
 }
 
@@ -185,6 +190,7 @@ func (l *Logger) Warningf(format string, values ...interface{}) {
 	if l.loggingLevel > WarningLevel {
 		return
 	}
+
 	l.log(l.warningPrefix, fmt.Sprintf(format, values...))
 }
 
@@ -201,6 +207,7 @@ func (l *Logger) Errorf(format string, values ...interface{}) {
 	if l.loggingLevel > ErrorLevel {
 		return
 	}
+
 	l.log(l.errorPrefix, fmt.Sprintf(format, values...))
 }
 
@@ -209,7 +216,9 @@ func (l *Logger) Fatal(values ...interface{}) {
 	if l.loggingLevel > FatalLevel {
 		return
 	}
+
 	l.log(l.fatalPrefix, fmt.Sprint(values...))
+
 	l.exitFunction()
 }
 
@@ -218,35 +227,32 @@ func (l *Logger) Fatalf(format string, values ...interface{}) {
 	if l.loggingLevel > FatalLevel {
 		return
 	}
+
 	l.log(l.fatalPrefix, fmt.Sprintf(format, values...))
+
 	l.exitFunction()
 }
 
 func (l *Logger) log(prefix, message string) {
-	// synchronization
 	l.mutex.Lock()
 	defer l.mutex.Unlock()
 
-	// clear buffer
 	l.buffer = l.buffer[:0]
 
-	// append timestamp to buffer
 	l.buffer = time.Now().AppendFormat(l.buffer, l.timeFormat)
 	l.buffer = append(l.buffer, " "...)
 
-	//append prefix to buffer
 	l.buffer = append(l.buffer, prefix...)
 	l.buffer = append(l.buffer, " "...)
 
-	// append message to buffer
 	l.buffer = append(l.buffer, message...)
 
-	// append new line character
 	l.buffer = append(l.buffer, "\n"...)
 
-	// write buffer to output, ignore error
-	_, _ = l.output.Write(l.buffer)
+	_, err := l.output.Write(l.buffer)
+	if err != nil {
+		fmt.Fprintf(l.internalErrorOutput, "writing to log's output failed, %s", err.Error())
+	}
 
-	// call hook function
 	l.hookFunction(prefix, message)
 }
